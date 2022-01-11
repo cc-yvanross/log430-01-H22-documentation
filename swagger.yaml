@@ -1,78 +1,255 @@
 openapi: 3.0.0
 info:
-  title: "LOG430"
-  version: 0.1.9
-# servers:
-#   - url: http://api.example.com/v1
-#   - url: http://staging-api.example.com
-tags:
-- name: IRouteCalculator
-  description: Service that allow comparison of routes
-- name: IService
-  description: Basic endpoints that all micro services should implements
+  title: LOG430
+  version: 1.0.0
+  description: |-
+    Documentation de base pour les micro services du laboratoire de LOG430. 
+    École de Technologie Supérieure - Hiver 2022. 
+
+    En cas de question : **@Coordonnateur** sur discord
+servers:
+  - url: test.api
 paths:
-  /route/{origin}/{destination}:
+  '/route/{origin}/{destination}':
     get:
-      summary: Return the time between two points.
-      description: Return the estimated route time between two points for a given provider.
       tags:
         - IRouteCalculator
       parameters:
-        - in: path
+        - example: '45.5944645,-73.4704491'
           name: origin
+          description: 'Coordinates of the origin point (Format : LAT,LONG)'
           schema:
             type: string
+          in: path
           required: true
-          description: "Coordinates of the origin point (Format : LAT,LONG)"
-          example: 45.5944645,-73.4704491
-        - in: path
+        - example: '45.5944645,-73.4704491'
           name: destination
+          description: 'Coordinates of the destination point (Format : LAT,LONG)'
           schema:
             type: string
+          in: path
           required: true
-          description: "Coordinates of the destination point (Format : LAT,LONG)"
-          example: 45.5944645,-73.4704491
       responses:
         '200':
-          description: Information about the time required to drive from origin to destination
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/RouteCalulatorResponse'
-    
+              schema:
+                $ref: '#/components/schemas/RouteCalculatorResponse'
+          description: Information about the time required to drive from origin to destination
+      summary: Get travel time between to points
+      description: Return the estimated route time between two points for a given provider.
+      operationId: get-travel-time
   /api/kill:
-    get:
-      summary: Kill the service.
-      description: This endpoint allow the ChaosMonkey to kill a given API.
+    post:
       tags:
-        - IRouteCalculator
+        - IService
       responses:
         '200':
-          description: Information about the time required to drive from origin to destination
+          description: OK
+      summary: Kill the service.
+      description: This endpoint allow to kill a given API to test the architecture resilience.
+      operationId: service-kill
+  /api/info:
+    get:
+      tags:
+        - IService
+      responses:
+        '200':
+          description: OK
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/RouteCalulatorResponse'
-    
+              schema:
+                $ref: '#/components/schemas/ApiStatusResponse'
+      summary: Get API info
+      description: This endpoint returns usefull information on the API
+      operationId: service-status
+    parameters: []
+  /api/latency:
+    put:
+      summary: Set API latency
+      tags:
+        - IService
+      responses:
+        '200':
+          description: OK
+      operationId: service-latency
+      description: Update the micro-service latency for testing purpose.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              x-examples:
+                example-1:
+                  latency: 0
+              properties:
+                latency:
+                  type: number
+                  description: The latency to add (in seconds) for test purposes. To reset latency set latency to 0
+              required:
+                - latency
+            examples:
+              example:
+                value:
+                  latency: 5
+        description: ''
+  /discovery:
+    post:
+      summary: Register to service registry
+      tags:
+        - IServiceDiscovery
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRegistryItem'
+      operationId: post-discovery-register
+      description: |-
+        Register a new micro service to the service registry so that it is available for other services.
+
+        The ServiceDiscovery service will periodically check that the service is still active using the `/api/info` route.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiRegistryRequest'
+    get:
+      summary: Get list of service
+      tags:
+        - IServiceDiscovery
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiRegistryItem'
+      operationId: get-discovery
+      description: Returns the list of the currently registred services.
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: team
+          description: Filter services using team number (optional)
+        - schema:
+            type: string
+          in: query
+          name: serviceName
+          description: Filter services using the service name (optional)
+  '/discovery/{serviceId}':
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: serviceId
+        in: path
+        required: true
+        description: Service Identifier
+    get:
+      summary: Get service from the registry
+      tags:
+        - IServiceDiscovery
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRegistryItem'
+      operationId: get-discovery-serviceId
+      description: Get a specific service from the registry from the `serviceId`
+    delete:
+      summary: Unregister service
+      tags:
+        - IServiceDiscovery
+      responses:
+        '200':
+          description: OK
+      operationId: delete-discovery-serviceId
+      description: Unregister a service from the registry with `serviceId`.
 components:
   schemas:
-    RouteCalulatorResponse:
+    RouteCalculatorResponse:
       type: object
-      properties: 
-        date: 
-          type: string
+      properties:
+        date:
           format: date-time
+          type: string
         origin:
+          format: 'lat,long'
           type: string
-          format: lat,long
         destination:
+          format: 'lat,long'
           type: string
-          format: lat,long
         duration:
-          type: number
           description: Duration in minutes
-        distance:
           type: number
+        distance:
           description: Distance in meters
-        
-            
+          type: number
+    ApiStatusResponse:
+      title: ApiStatusResponse
+      type: object
+      properties:
+        serviceName:
+          type: string
+          example: GoogleMapExternalService
+          description: The name of the micro service
+        teamNumber:
+          type: number
+          example: 3
+          description: Number of the team that developed the service
+        currentLatency:
+          type: string
+          example: '0'
+          description: Current service latency
+      description: Api info response which allows to check that the service is still active
+    ApiRegistryItem:
+      title: ApiRegistryItem
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A UUID generated by the ServiceDiscovery API
+        url:
+          type: string
+          format: uri
+          description: The url of the service
+        serviceName:
+          type: string
+          description: The name of the service
+        teamNumber:
+          type: number
+          description: Number of the team who implemented the service
+    ApiRegistryRequest:
+      title: ApiRegistryRequest
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: The url of the service
+        serviceName:
+          type: string
+          description: The name of the service
+        teamNumber:
+          type: number
+          description: Number of the team who implemented the service
+      required:
+        - url
+        - serviceName
+        - teamNumber
+tags:
+  - name: IRouteCalculator
+    description: Service that allow comparison of routes
+  - name: IService
+    description: Basic endpoints that all micro services should implements
+  - name: IServiceDiscovery
+    description: Micro-service that register all available micro-services
