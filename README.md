@@ -9,7 +9,7 @@
 
 ### Consultation
 
-Voir https://cc-yvanross.github.io/log430-01-H22-api-documentation/
+Voir https://cc-yvanross.github.io/log430-01-H22-documentation/
 
 ### Modification
 
