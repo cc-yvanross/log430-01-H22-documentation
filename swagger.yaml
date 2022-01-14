@@ -39,16 +39,6 @@ paths:
       summary: Get travel time between to points
       description: Return the estimated route time between two points for a given provider.
       operationId: get-travel-time
-  /api/kill:
-    post:
-      tags:
-        - IService
-      responses:
-        '200':
-          description: OK
-      summary: Kill the service.
-      description: This endpoint allow to kill a given API to test the architecture resilience.
-      operationId: service-kill
   /api/info:
     get:
       tags:
