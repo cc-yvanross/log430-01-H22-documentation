@@ -5,11 +5,57 @@ info:
     Documentation de l'API pour le micro service MontrealDataSimulationService du laboratoire de LOG430. 
     École de Technologie Supérieure - Hiver 2022. 
     En cas de question : **@equipe06** sur discord
+
     ## Description de l'interface
-    ## Modifiabilité
+
+    Montreal Data Simulation Service est un micro-service responsable du pré-traitement des données des senseurs de traffic de la ville de Montréal.
+
+    La description détaillée des **ressources** (endpoints), **types de données** et de la **gestion des erreurs** pour cette interface est disponible en format OpenAPI ci-dessous: 
+
+    ## Variabilité
+
+    Non-applicable
+
     ## Attributs de qualité
+
+    #### Disponibilité
+
+    * AQD1 - Montreal Data Simulation Service permet le monitorage de l'état pour tous les microservices enregistrés dans le registre.
+
+    #### Interopérabilité
+
+    * AQI2 - Permet de récupérer la liste de tous les microservices de l'architecture pour favoriser l'interopérabilité des microservices.
+
+    ---
+
     ## Justification de la conception
-    ## Guide d'utilisation
+
+    #### Utilisation des standards REST
+
+    Nous avons utilisé les standards REST pour définir les ressources, la structure et la gestion des erreur de cet interface. 
+
+    REST permet de faciliter l'accès aux données en format JSON à l'aide de requêtes HTTP. Il sera donc simple pour les autres équipes de consommer les données de notre interface. 
+
+    Par ailleurs, puisque les ressources sont organisées par routes hiérarchiques, l'ajout de nouvelles fonctionnalités à l'interface est simple, puisqu'il ne suffit que d'ajouter des routes supplémentaires.
+
+    #### Définition des ressources
+
+    Les ressources (endpoints) de l'interface ont été définies dans le but de répondre aux exigences fonctionnelles suivantes:
+
+    * Récupérer la liste de tous les microservices de l'architecture. (CU01-2.a + CU02-1.1)
+    * Enregistrer des microservices dans le registre pour pouvoir les surveiller. (AQD1)
+    * Récupérer les évennements de l'état d'un microservice. (CU02-2.3)
+    * Récupérer l'historique de latence de tous les microservices. (CU02-1.1)
+
+    #### Évolutivité
+
+    Les différentes endpoints de l'interface ont été regroupées par controlleurs afin de mieux séparer les responsabilités de l'API. Ceci nous permet de faciliter la maintenance et l'évolutivité du service.
+
+    Les fonctions de base de l'interface ont été implémentées durant l'itération 1, mais il est possible que d'autres fonctions soient ajoutées dans les itérations subséquentes.
+
+    ## Exemples d'utilisation
+
+    Voir la documentation OpenAPI ci-dessous pour des exemples de requêtes et de réponses pour chaque endpoint.
     
   version: '1.0'
 paths:
