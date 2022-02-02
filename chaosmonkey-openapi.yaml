@@ -1,37 +1,38 @@
 openapi: 3.0.2
 info:
-  title: Interface API ChaosMonkey
-  version: 1.0.0
-  description: |-
-    Documentation de base pour le micro service ChaosMonkey du laboratoire de LOG430. 
+  title: LOG430
+  description: |
+
+    Documentation de l'API pour le micro service ChaosMonkey du laboratoire de LOG430. 
     École de Technologie Supérieure - Hiver 2022. 
 
     En cas de question : **@equipe02** sur discord
-  
-    
+
+
     ## Description de l'interface
     Cette interface sera utilisé pour effectuer des tests de résilience dans l'infrastructure du système. Grâce à cette interface, il sera possible de provoquer des pannes en environnement réel afin de vériquer que notre architecture continuera à fonctionner malgré les tentatives de pannes. Cette interface sera notamment utilisée par ***ServiceDiscovery*** et  ***Service Manager UI***.
-    
+
     ## Modifiabilité
     Cette interface permet la modification de la latence d'un microservice. Pour ce faire, il faudra envoyer en paramètre le nom du microservice en ***String*** par ***POST /planter/{serviceName}*** pour faire changer la latence.
-    
+
     ## Attributs de qualité
     Cette interface permettra de vérifier la fiabilité des microservices mise en place dans le système en effectuant des tests de résilience des infrastructures du système. Ainsi, on touche à la ***testabilité*** (AQT1), car cette interface permettra de modifier dynamiquement la latence des microservices de notre architecture.
-    
+
     ## Justification de la conception
     L'utilisation d'OpenAPI a pour but de pouvoir être capable de générer plus facilement le code et la documentation, ce qui rend le travail plus efficace.
-    
+
     ## Guide d'utilisation
     À titre d'exemple, si on voulait faire planter un microservice à l'aide de cette interface, il faut en premier lieu récupérer la liste des noms des microservices, par la suite, il faut sélectionner un nom dans la liste et passer par ***POST /planter/{serviceName}*** en mettant le paramètre du nom en **String** afin de planter un microservice.
-    
-    Pour mieux comprendre le fonctionnement de cette interface, il suffit de visionner le diagramme de séquence en cliquant sur le lien suivant :
 
+    Pour mieux comprendre le fonctionnement de cette interface, il suffit de visionner le diagramme de séquence en cliquant sur le lien suivant :
+  version: 1.0.0
 paths:
   /chaos/tuer/{serviceName}:
     post:
       tags:
         - ChaosMonkey
       summary: Tuer Microservice
+      description: Tuer un réplica du microservice en paramètre
       operationId: tuer_microservice_chaos_tuer__serviceName__post
       parameters:
         - required: true
@@ -64,6 +65,7 @@ paths:
       tags:
         - ChaosMonkey
       summary: Tuer Tous Replicas Microservice
+      description: Tuer tous les réplicas du microservice en paramètre
       operationId: tuer_tous_replicas_microservice_chaos_tuer_tous_replicas__serviceName__post
       parameters:
         - required: true
@@ -96,6 +98,7 @@ paths:
       tags:
         - ChaosMonkey
       summary: Planter Microservice
+      description: Fais planter un service. Configure la latency de ce service pour simuler un hang state
       operationId: planter_microservice_chaos_planter__serviceName__post
       parameters:
         - required: true
@@ -128,6 +131,7 @@ paths:
       tags:
         - ChaosMonkey
       summary: Tuer Ou Planter Au Hasard
+      description: Configure le temps entre chaque suppression aléatoire de microservice. Mettre à 0 pour arrêter la boucle de chaos
       operationId: tuer_ou_planter_au_hasard_chaos_automatique__tempsLoop__post
       parameters:
         - required: true
@@ -151,35 +155,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ApiLatencyPutRequest:
-      title: ApiLatencyPutRequest
-      required:
-        - latency
-      type: object
-      properties:
-        latency:
-          title: Latency
-          type: number
-          description: The latency to add (in seconds) for test purposes. To reset latency set latency to 0
-    ApiStatusResponse:
-      title: ApiStatusResponse
-      type: object
-      properties:
-        serviceName:
-          title: Servicename
-          type: string
-          description: The name of the micro service
-          example: GoogleMapExternalService
-        teamNumber:
-          title: Teamnumber
-          type: number
-          description: Number of the team that developed the service
-          example: 3
-        currentLatency:
-          title: Currentlatency
-          type: string
-          description: Current service latency
-          example: '0'
     HTTPError:
       title: HTTPError
       required:
