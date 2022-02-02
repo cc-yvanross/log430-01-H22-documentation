@@ -1,0 +1,204 @@
+openapi: 3.0.1
+info:
+  title: MontrealDataSimulationService
+  description: test123 test345
+  version: '1.0'
+paths:
+  /api/info:
+    get:
+      tags:
+        - Api
+      summary: Get the API info
+      description: This endpoint returns usefull information on the API.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiInfo'
+  /api/latency:
+    put:
+      tags:
+        - Api
+      summary: Set the API latency
+      description: Update the micro-service latency for testing purpose.
+      requestBody:
+        description: A model containing the latency value
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LatencyWriteModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LatencyWriteModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/LatencyWriteModel'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /data/{startDate}/{endDate}/{startLat}/{endLat}:
+    get:
+      tags:
+        - Data
+      summary: Returns a list of SensorData between the two specified dates and latitudes
+      description: The date format us YYYY-MM-DD.
+      parameters:
+        - name: startDate
+          in: path
+          description: The start date
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: path
+          description: The end date
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: startLat
+          in: path
+          description: The start latitude
+          required: true
+          schema:
+            type: number
+            format: double
+        - name: endLat
+          in: path
+          description: The end latitude
+          required: true
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /data/sensors:
+    get:
+      tags:
+        - Data
+      summary: Returns a list of Sensor
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SensorInfo'
+  /data/init:
+    get:
+      tags:
+        - Data
+      summary: This call will initialize the DB. Should be run only once.
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+components:
+  schemas:
+    ApiInfo:
+      type: object
+      properties:
+        serviceName:
+          type: string
+          nullable: true
+        teamNumber:
+          type: integer
+          format: int32
+        currentLatency:
+          type: integer
+          format: int32
+      additionalProperties: false
+    DataModel:
+      type: object
+      properties:
+        detectorId:
+          type: integer
+          format: int32
+        laneId:
+          type: integer
+          format: int32
+        mesureDateTime:
+          type: string
+          format: date-time
+        traficType:
+          type: string
+          nullable: true
+        vehicleCount:
+          type: number
+          format: double
+        avgSpeed:
+          type: number
+          format: double
+      additionalProperties: false
+    LatencyWriteModel:
+      type: object
+      properties:
+        latency:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: {}
+    SensorInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        intersection:
+          type: integer
+          format: int32
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+      additionalProperties: false
