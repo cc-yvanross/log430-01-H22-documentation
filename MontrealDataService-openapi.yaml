@@ -1,7 +1,16 @@
 openapi: 3.0.1
 info:
   title: MontrealDataSimulationService
-  description: test123 test345
+  description: |
+    Documentation de l'API pour le micro service MontrealDataSimulationService du laboratoire de LOG430. 
+    École de Technologie Supérieure - Hiver 2022. 
+    En cas de question : **@equipe06** sur discord
+    ## Description de l'interface
+    ## Modifiabilité
+    ## Attributs de qualité
+    ## Justification de la conception
+    ## Guide d'utilisation
+    
   version: '1.0'
 paths:
   /api/info:
