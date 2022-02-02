@@ -1,29 +1,27 @@
 openapi: 3.0.2
 info:
-  title: LOG430
+  title: Interface API ChaosMonkey
   version: 1.0.0
   description: |-
-    Documentation de base pour les micro services du laboratoire de LOG430. 
+    Documentation de base pour le micro service ChaosMonkey du laboratoire de LOG430. 
     École de Technologie Supérieure - Hiver 2022. 
 
-    En cas de question : **@Coordonnateur** sur discord
+    En cas de question : **@equipe02** sur discord
+  
     
-    # ChaosMonkeyAPI
-    Version : 1.0.0
-    
-    ## Description de l'interface
+    # Description de l'interface
     Cette interface sera utilisé pour effectuer des tests de résilience dans l'infrastructure du système. Grâce à cette interface, il sera possible de provoquer des pannes en environnement réel afin de vériquer que notre architecture continuera à fonctionner malgré les tentatives de pannes. Cette interface sera notamment utilisée par ***ServiceDiscovery*** et  ***Service Manager UI***.
     
-    ## Modifiabilité
+    # Modifiabilité
     Cette interface permet la modification de la latence d'un microservice. Pour ce faire, il faudra envoyer en paramètre le nom du microservice en ***String*** par ***POST /planter/{serviceName}*** pour faire changer la latence.
     
-    ## Attributs de qualité
+    # Attributs de qualité
     Cette interface permettra de vérifier la fiabilité des microservices mise en place dans le système en effectuant des tests de résilience des infrastructures du système. Ainsi, on touche à la ***testabilité*** (AQT1), car cette interface permettra de modifier dynamiquement la latence des microservices de notre architecture.
     
-    ## Justification de la conception
+    # Justification de la conception
     L'utilisation d'OpenAPI a pour but de pouvoir être capable de générer plus facilement le code et la documentation, ce qui rend le travail plus efficace.
     
-    ## Guide d'utilisation
+    # Guide d'utilisation
     À titre d'exemple, si on voulait faire planter un microservice à l'aide de cette interface, il faut en premier lieu récupérer la liste des noms des microservices, par la suite, il faut sélectionner un nom dans la liste et passer par ***POST /planter/{serviceName}*** en mettant le paramètre du nom en **String** afin de planter un microservice.
     
     Pour mieux comprendre le fonctionnement de cette interface, il suffit de visionner le diagramme de séquence en cliquant sur le lien suivant :
