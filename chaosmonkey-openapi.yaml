@@ -1,6 +1,6 @@
 openapi: 3.0.2
 info:
-  title: LOG430
+  title: ChaosMonkey API
   description: |
 
     Documentation de l'API pour le micro service ChaosMonkey du laboratoire de LOG430. 
