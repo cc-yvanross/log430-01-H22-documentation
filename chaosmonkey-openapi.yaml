@@ -1,0 +1,209 @@
+openapi: 3.0.2
+info:
+  title: LOG430
+  description: |-
+    Documentation de base pour les micro services du laboratoire de LOG430.
+    École de Technologie Supérieure - Hiver 2022.
+
+    En cas de question : **@Coordonnateur** sur discord
+  version: 1.0.0
+paths:
+  /chaos/tuer/{serviceName}:
+    post:
+      tags:
+        - ChaosMonkey
+      summary: Tuer Microservice
+      operationId: tuer_microservice_chaos_tuer__serviceName__post
+      parameters:
+        - required: true
+          schema:
+            title: Servicename
+            type: string
+          name: serviceName
+          in: path
+      responses:
+        '200':
+          description: Operation Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPOkMessage'
+        '404':
+          description: Requested ressource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /chaos/tuer-tous-replicas/{serviceName}:
+    post:
+      tags:
+        - ChaosMonkey
+      summary: Tuer Tous Replicas Microservice
+      operationId: tuer_tous_replicas_microservice_chaos_tuer_tous_replicas__serviceName__post
+      parameters:
+        - required: true
+          schema:
+            title: Servicename
+            type: string
+          name: serviceName
+          in: path
+      responses:
+        '200':
+          description: Operation Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPOkMessage'
+        '404':
+          description: Requested ressource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /chaos/planter/{serviceName}:
+    post:
+      tags:
+        - ChaosMonkey
+      summary: Planter Microservice
+      operationId: planter_microservice_chaos_planter__serviceName__post
+      parameters:
+        - required: true
+          schema:
+            title: Servicename
+            type: string
+          name: serviceName
+          in: path
+      responses:
+        '200':
+          description: Operation Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPOkMessage'
+        '404':
+          description: Requested ressource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /chaos/automatique/{tempsLoop}:
+    post:
+      tags:
+        - ChaosMonkey
+      summary: Tuer Ou Planter Au Hasard
+      operationId: tuer_ou_planter_au_hasard_chaos_automatique__tempsLoop__post
+      parameters:
+        - required: true
+          schema:
+            title: Tempsloop
+            type: integer
+          name: tempsLoop
+          in: path
+      responses:
+        '200':
+          description: Operation Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPOkMessage'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ApiLatencyPutRequest:
+      title: ApiLatencyPutRequest
+      required:
+        - latency
+      type: object
+      properties:
+        latency:
+          title: Latency
+          type: number
+          description: The latency to add (in seconds) for test purposes. To reset latency set latency to 0
+    ApiStatusResponse:
+      title: ApiStatusResponse
+      type: object
+      properties:
+        serviceName:
+          title: Servicename
+          type: string
+          description: The name of the micro service
+          example: GoogleMapExternalService
+        teamNumber:
+          title: Teamnumber
+          type: number
+          description: Number of the team that developed the service
+          example: 3
+        currentLatency:
+          title: Currentlatency
+          type: string
+          description: Current service latency
+          example: '0'
+    HTTPError:
+      title: HTTPError
+      required:
+        - detail
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: string
+    HTTPOkMessage:
+      title: HTTPOkMessage
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          title: Message
+          type: string
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    ValidationError:
+      title: ValidationError
+      required:
+        - loc
+        - msg
+        - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            type: string
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
