@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: MontrealDataSimulationService
+  title: ITrafficDataSource
   description: |
     Documentation de l'API pour le micro service MontrealDataSimulationService du laboratoire de LOG430. 
     École de Technologie Supérieure - Hiver 2022. 
@@ -8,9 +8,9 @@ info:
 
     ## Description de l'interface
 
-    Montreal Data Simulation Service est un micro-service responsable du pré-traitement des données des senseurs de traffic de la ville de Montréal.
+    Montreal Data Simulation Service est un micro-service responsable du pré-traitement des données des capteurs de circulation routière de la ville de Montréal.
 
-    La description détaillée des **ressources** (endpoints), **types de données** et de la **gestion des erreurs** pour cette interface est disponible en format OpenAPI ci-dessous: 
+    La description détaillée des **ressources** (endpoints), **types de données** et de la **gestion des erreurs** pour cette interface est disponible en format OpenAPI plus bas dans cette page: 
 
     ## Variabilité
 
@@ -18,13 +18,7 @@ info:
 
     ## Attributs de qualité
 
-    #### Disponibilité
-
-    * AQD1 - Montreal Data Simulation Service permet le monitorage de l'état pour tous les microservices enregistrés dans le registre.
-
-    #### Interopérabilité
-
-    * AQI2 - Permet de récupérer la liste de tous les microservices de l'architecture pour favoriser l'interopérabilité des microservices.
+    AQT1: Le service permet de modifier la latence de ses réponses à des fins de tests.
 
     ---
 
@@ -32,26 +26,20 @@ info:
 
     #### Utilisation des standards REST
 
-    Nous avons utilisé les standards REST pour définir les ressources, la structure et la gestion des erreur de cet interface. 
+    Nous avons utilisé les standards REST pour la conception de cet interface tel qu'il a été défini par l'équipe de coordonation.
 
-    REST permet de faciliter l'accès aux données en format JSON à l'aide de requêtes HTTP. Il sera donc simple pour les autres équipes de consommer les données de notre interface. 
-
-    Par ailleurs, puisque les ressources sont organisées par routes hiérarchiques, l'ajout de nouvelles fonctionnalités à l'interface est simple, puisqu'il ne suffit que d'ajouter des routes supplémentaires.
+    Puisque l'interface utilise un format standard, il sera facile pour les autres équipes d'utiliser les données de notre service dans leur application. 
 
     #### Définition des ressources
 
     Les ressources (endpoints) de l'interface ont été définies dans le but de répondre aux exigences fonctionnelles suivantes:
 
-    * Récupérer la liste de tous les microservices de l'architecture. (CU01-2.a + CU02-1.1)
-    * Enregistrer des microservices dans le registre pour pouvoir les surveiller. (AQD1)
-    * Récupérer les évennements de l'état d'un microservice. (CU02-2.3)
-    * Récupérer l'historique de latence de tous les microservices. (CU02-1.1)
+    * Récupérer la liste des données des capteurs de traffic dans un interval de temps et de latitude déterminé. (Util)
 
     #### Évolutivité
 
-    Les différentes endpoints de l'interface ont été regroupées par controlleurs afin de mieux séparer les responsabilités de l'API. Ceci nous permet de faciliter la maintenance et l'évolutivité du service.
-
-    Les fonctions de base de l'interface ont été implémentées durant l'itération 1, mais il est possible que d'autres fonctions soient ajoutées dans les itérations subséquentes.
+    La conception de ce micro-service à été fait dans le but que celui-ci soit facilement modifiable. Nous avons l'option d'ajouter un contrôleur ou 
+    simplement un autre endpoint afin d'ajouter d'autre fonctionnalité au besoin.
 
     ## Exemples d'utilisation
 
