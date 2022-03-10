@@ -126,6 +126,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  "/chaos/latence/{serviceName}/{latence}":
+    post:
+      summary: Set Latence
+      operationId: set_latence_chaos_latence__serviceName___latence__post
+      parameters:
+      - required: true
+        schema:
+          title: Servicename
+          type: string
+        name: serviceName
+        in: path
+      - required: true
+        schema:
+          title: Latence
+          type: number
+        name: latence
+        in: path
+      - required: false
+        schema:
+          title: Request Id
+          type: string
+        name: request_id
+        in: header
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HTTPValidationError"
   /chaos/automatique/{tempsLoop}:
     post:
       tags:
