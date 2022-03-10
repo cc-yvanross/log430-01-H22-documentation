@@ -126,7 +126,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  "/chaos/latence/{serviceName}/{latence}":
+  /chaos/latence/{serviceName}/{latence}:
     post:
       tags:
         - ChaosMonkey
