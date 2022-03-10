@@ -128,6 +128,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
   "/chaos/latence/{serviceName}/{latence}":
     post:
+      tags:
+        - ChaosMonkey
       summary: Set Latence
       operationId: set_latence_chaos_latence__serviceName___latence__post
       parameters:
